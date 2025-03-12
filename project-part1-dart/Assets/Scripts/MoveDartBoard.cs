@@ -16,6 +16,9 @@ public class MoveDartBoard : MonoBehaviour
     // Input action for launching the dart
     private InputAction launchAction;
 
+    // gravity force
+    public Vector3 gravityForce = new Vector3(0, -9.81f, 0);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +45,10 @@ public class MoveDartBoard : MonoBehaviour
     void FixedUpdate()
     {
         // add gravitational force
+        if (isLaunched)
+        {
+            rb.AddForce(gravityForce, ForceMode.Acceleration);
+        }
     }
 
 
