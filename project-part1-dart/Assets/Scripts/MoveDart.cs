@@ -88,7 +88,8 @@ public class MoveDart : MonoBehaviour
             isLaunched = true;
             rb.isKinematic = false;
 
-            // give the dart an initial velocity
+            // give the dart an initial velocity with a vector
+            rb.linearVelocity = -transform.up * initialVelocity;
 
         }
     }
