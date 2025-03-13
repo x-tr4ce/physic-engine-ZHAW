@@ -31,6 +31,11 @@ public class Controller : MonoBehaviour
     private InputAction launchAction;
     private InputAction saveAction;
 
+    // vars to calc the acceleration
+    private Vector3 previousDartVelocity;
+    private Vector3 previousBoardVelocity;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +77,10 @@ public class Controller : MonoBehaviour
         // Note: OnCollision is called after FixedUpdate, so this code should also capture the last data point correctly
         if (isLaunched && !moveDart.hitBoard)
         {
+            // calculate acceleration
+            Vector3 dartAcceleration = (dart.linearVelocity - previousDartVelocity) / Time.fixedDeltaTime;
+            Vector3 boardAcceleration = (board.linearVelocity - previousBoardVelocity) / Time.fixedDeltaTime;
+
             // add current data to time series
             timeSeries.Add(new TimeSeriesData
             {
@@ -79,8 +88,24 @@ public class Controller : MonoBehaviour
                 DartPositionY = dart.position.y,
                 DartPositionZ = dart.position.z,
                 BoardPositionY = board.position.y,
-                BoardPositionZ = board.position.z
+                BoardPositionZ = board.position.z,
+
+                // new fields for velocity
+                DartVelocityY = dart.linearVelocity.y,
+                DartVelocityZ = dart.linearVelocity.z,
+                BoardVelocityY = board.linearVelocity.y,
+                BoardVelocityZ = board.linearVelocity.z,
+
+                // new fields for acceleration
+                DartAccelerationY = dartAcceleration.y,
+                DartAccelerationZ = dartAcceleration.z,
+                BoardAccelerationY = boardAcceleration.y,
+                BoardAccelerationZ = boardAcceleration.z
             });
+
+            // store the current velocity for the next frame
+            previousDartVelocity = dart.linearVelocity;
+            previousBoardVelocity = board.linearVelocity;
 
             // increase the current time step
             currentTime += Time.fixedDeltaTime;
@@ -135,13 +160,29 @@ public class TimeSeriesData
     public float BoardPositionY { get; set; }
     public float BoardPositionZ { get; set; }
 
+    // new fields for velocity
+    public float DartVelocityY { get; set; }
+    public float DartVelocityZ { get; set; }
+    public float BoardVelocityY { get; set; }
+    public float BoardVelocityZ { get; set; }
+
+    // new fields for acceleration
+    public float DartAccelerationY { get; set; }
+    public float DartAccelerationZ { get; set; }
+    public float BoardAccelerationY { get; set; }
+    public float BoardAccelerationZ { get; set; }
+
     public override string ToString()
     {
-        return $"{Time},{DartPositionY},{DartPositionZ},{BoardPositionY},{BoardPositionZ}";
+        return $"{Time},{DartPositionY},{DartPositionZ},{BoardPositionY},{BoardPositionZ}," +
+               $"{DartVelocityY},{DartVelocityZ},{BoardVelocityY},{BoardVelocityZ}," +
+               $"{DartAccelerationY},{DartAccelerationZ},{BoardAccelerationY},{BoardAccelerationZ}";
     }
 
     public static string Header()
     {
-        return "t, y_Dart, z_Dart, y_Board, z_Board";
+        return "t,y_Dart,z_Dart,y_Board,z_Board," +
+               "DartVelY,DartVelZ,BoardVelY,BoardVelZ," +
+               "DartAccY,DartAccZ,BoardAccY,BoardAccZ";
     }
 }
