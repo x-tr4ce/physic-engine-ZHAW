@@ -48,10 +48,10 @@ public class Car : MonoBehaviour
     public float initialVelocity = 0f;
 
     // the length of the uncompressed spring
-    public float springLength = 0f;
+    public float springLength = 0.15f; // 15 cm
 
     // spring constant
-    public float springConstant = 0f;
+    public float springConstant = 10f; // 10 N/m
 
     // friction coefficient bumper (laminare viskose D�mpfung FR=frictionCoefficient * v)
     public float frictionCoefficient = 0f;
@@ -120,7 +120,7 @@ public class Car : MonoBehaviour
     void Update()
     {
         // launch car
-        if (Keyboard.current[Key.Space].wasPressedThisFrame || (recording && !isLaunched))
+        if (Keyboard.current[Key.Space].wasPressedThisFrame && (recording && !isLaunched))
         {
             // remember that car was launched
             isLaunched = true;
@@ -128,9 +128,9 @@ public class Car : MonoBehaviour
             // remember the current time
             launchTime = Time.time;
 
-            // Your code here ...
+            // set the initial velocity of the car
+            rb.linearVelocity = new Vector3(0, 0, initialVelocity);
             
-
             // log
             Debug.Log("Launching the car");
         }
@@ -147,24 +147,51 @@ public class Car : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Your code here ...
-        
+        // distance of the car to the bumpers
+        float distToLeft = transform.position.z - leftBumper.position.z;
+        float distToRight = rightBumper.position.z - transform.position.z;
+
+        // compression of the springs
+        // + (carWidth + bumperWidth) / 2f to account for the width of the car and the bumper
+        float compressionLeft = Mathf.Max(0f, springLength - distToLeft + (carWidth + bumperWidth) / 2f);
+        // float compressionRight = Mathf.Max(0f, springLength - distToRight + (carWidth + bumperWidth) / 2f);
+        // -> not needed for exercise 2
+
+        float forceLeft = compressionLeft * springConstant;
+        // float forceRight = compressionRight * springConstant;
+        // -> not needed for exercise 2
+
+        // force of the springs
+        Vector3 force = Vector3.zero;
 
         // === left spring
-
-        
-
+        if (compressionLeft > 0f)
+            force += Vector3.forward * (compressionLeft * springConstant);
 
         // === right spring
+        // if (compressionRight > 0f)
+        //     force += Vector3.back * (compressionRight * springConstant);
+        // -> not needed for exercise 2
 
-        
+        if (transform.position.z + (carWidth / 2) >= rightBumper.position.z - (bumperWidth / 2))
+        {
+            // Kollision detected
+            // exercise 2: just reverse the velocity of the car
+            float vAfterCollision = -1 * rb.linearVelocity.z;
+            rb.linearVelocity = new Vector3(0, 0, vAfterCollision);
+        }
+
+
+        // apply the force to the car
+        rb.AddForce(force, ForceMode.Force);
+
 
 
         // === left bumper
 
         if (bumperMode == 1 || bumperMode == 2)
         {
-            
+
         }
 
 
@@ -174,9 +201,14 @@ public class Car : MonoBehaviour
         if (isLaunched)
         {
             // Your code here ... (adapt as needed)
-            //TimeSeriesData timeSeriesData = new(rb, Time.time - launchTime, compressionLeft, forceLeft, compressionRight, forceRight, leftBumper.position.z, leftBumper.linearVelocity.z);
-            //exporter.AddData(timeSeriesData);
+            // TimeSeriesData timeSeriesData = new(rb, Time.time - launchTime, compressionLeft, forceLeft, compressionRight, forceRight, leftBumper.position.z, leftBumper.linearVelocity.z);
+            // not needed for exercise 2
+            
+            TimeSeriesData timeSeriesData = new(rb, Time.time - launchTime, compressionLeft, forceLeft, leftBumper.position.z, leftBumper.linearVelocity.z);
+
+            exporter.AddData(timeSeriesData);
         }
+
     }
 
     void OnGUI()

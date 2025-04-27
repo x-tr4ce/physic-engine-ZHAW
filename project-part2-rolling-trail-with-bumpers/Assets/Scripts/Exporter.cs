@@ -84,8 +84,9 @@ public class TimeSeriesData
     public float VelocityZ { get; set; }
     public float CompressionLeftSpring { get; set; }
     public float ForceLeftSpring { get; set; }
-    public float CompressionRightSpring { get; set; }
-    public float ForceRightSpring { get; set; }
+    // public float CompressionRightSpring { get; set; }
+    // public float ForceRightSpring { get; set; }
+    // not needed for exercise 2
     public float BumperPositionZ { get; set; }
     public float BumperVelocityZ { get; set; }
 
@@ -95,9 +96,13 @@ public class TimeSeriesData
     }
 
     // Constructor that adds the current position etc. to the time series
-    public TimeSeriesData(Rigidbody rb, float currentTime, 
+    // public TimeSeriesData(Rigidbody rb, float currentTime, 
+    //                       float compressionLeftSpring, float forceLeftSpring, 
+    //                       float compressionRightSpring, float forceRightSpring,
+    //                       float bumperPositionZ, float bumperVelocityZ)
+    // not needed for exercise 2
+        public TimeSeriesData(Rigidbody rb, float currentTime, 
                           float compressionLeftSpring, float forceLeftSpring, 
-                          float compressionRightSpring, float forceRightSpring,
                           float bumperPositionZ, float bumperVelocityZ)
     {
         Time = currentTime;
@@ -109,15 +114,19 @@ public class TimeSeriesData
         VelocityZ = rb.linearVelocity.z;
         CompressionLeftSpring = compressionLeftSpring;
         ForceLeftSpring = forceLeftSpring;
-        CompressionRightSpring = compressionRightSpring;
-        ForceRightSpring = forceRightSpring;
+        // CompressionRightSpring = compressionRightSpring;
+        // ForceRightSpring = forceRightSpring;
+        // not needed for exercise 2
         BumperPositionZ = bumperPositionZ;
         BumperVelocityZ = bumperVelocityZ;
     }
 
     public override string ToString()
     {
-        return $"{Time},{PositionX},{PositionY},{PositionZ},{VelocityX},{VelocityY},{VelocityZ},{CompressionLeftSpring},{ForceLeftSpring},{CompressionRightSpring},{ForceRightSpring},{BumperPositionZ},{BumperVelocityZ}";
+        // return $"{Time},{PositionX},{PositionY},{PositionZ},{VelocityX},{VelocityY},{VelocityZ},{CompressionLeftSpring},{ForceLeftSpring},{CompressionRightSpring},{ForceRightSpring},{BumperPositionZ},{BumperVelocityZ}";
+        // not needed for exercise 2
+        return $"{Time},{PositionX},{PositionY},{PositionZ},{VelocityX},{VelocityY},{VelocityZ},{CompressionLeftSpring},{ForceLeftSpring},{BumperPositionZ},{BumperVelocityZ}";
+
     }
 
     public static string Header()
