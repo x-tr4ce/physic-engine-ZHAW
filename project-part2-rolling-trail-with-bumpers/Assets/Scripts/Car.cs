@@ -25,6 +25,7 @@ public class Car : MonoBehaviour
     // flag to remember if car was launched
     private bool isLaunched = false;
 
+
     // the width of the car (could also be gotten from the collider)
     private readonly float carWidth = 0.3f;
 
@@ -81,16 +82,15 @@ public class Car : MonoBehaviour
         {
             case 0:
                 // fix bumper in place
-
+                leftBumper.constraints = RigidbodyConstraints.FreezeAll;
+                rightBumper.constraints = RigidbodyConstraints.FreezeAll;
                 break;
             case 1:
             case 2:
-                // allow bumper to move along z-axis
-
-
-                // constrain motion of the bumper to 1D along z-axis
                 leftBumper.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                rightBumper.constraints = RigidbodyConstraints.FreezeAll;
                 break;
+
             default:
                 Assert.Fail("Invalid bumper mode");
                 break;
@@ -130,7 +130,7 @@ public class Car : MonoBehaviour
 
             // set the initial velocity of the car
             rb.linearVelocity = new Vector3(0, 0, initialVelocity);
-            
+
             // log
             Debug.Log("Launching the car");
         }
@@ -166,7 +166,20 @@ public class Car : MonoBehaviour
 
         // === left spring
         if (compressionLeft > 0f)
-            force += Vector3.forward * (compressionLeft * springConstant);
+        {
+            force += Vector3.forward * forceLeft;
+
+            // Apply equal and opposite force to the left bumper
+            if (bumperMode == 1 || bumperMode == 2)
+            {
+                // auf den Wagen:
+                rb.AddForce(Vector3.forward * forceLeft, ForceMode.Force);
+
+                // auf den Prellbock:
+                leftBumper.AddForce(Vector3.back * forceLeft, ForceMode.Force);
+            }
+
+        }
 
         // === right spring
         // if (compressionRight > 0f)
@@ -203,7 +216,7 @@ public class Car : MonoBehaviour
             // Your code here ... (adapt as needed)
             // TimeSeriesData timeSeriesData = new(rb, Time.time - launchTime, compressionLeft, forceLeft, compressionRight, forceRight, leftBumper.position.z, leftBumper.linearVelocity.z);
             // not needed for exercise 2
-            
+
             TimeSeriesData timeSeriesData = new(rb, Time.time - launchTime, compressionLeft, forceLeft, leftBumper.position.z, leftBumper.linearVelocity.z);
 
             exporter.AddData(timeSeriesData);
