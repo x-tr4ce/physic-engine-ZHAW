@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 1) CSV einlesen
-df = pd.read_csv('time_series-no-spring.csv')
+df = pd.read_csv('time_series-floating-bumper.csv')
 
 # 2) Daten extrahieren
 t       = df['t'].values
