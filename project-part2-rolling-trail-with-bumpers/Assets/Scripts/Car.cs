@@ -55,7 +55,7 @@ public class Car : MonoBehaviour
     public float springConstant = 10f; // 10 N/m
 
     // friction coefficient bumper (laminare viskose D�mpfung FR=frictionCoefficient * v)
-    public float frictionCoefficient = 0f;
+    public float frictionCoefficient = 5.2f;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -185,7 +185,7 @@ public class Car : MonoBehaviour
         // if (compressionRight > 0f)
         //     force += Vector3.back * (compressionRight * springConstant);
         // -> not needed for exercise 2
-
+§
         if (transform.position.z + (carWidth / 2) >= rightBumper.position.z - (bumperWidth / 2))
         {
             // Kollision detected
@@ -197,6 +197,14 @@ public class Car : MonoBehaviour
 
         // apply the force to the car
         rb.AddForce(force, ForceMode.Force);
+
+        // add friction to the left bumper
+        if (bumperMode == 2)
+        {
+            // formula: F = -v * frictionCoefficient
+            Vector3 friction = -leftBumper.linearVelocity * frictionCoefficient;
+            leftBumper.AddForce(friction, ForceMode.Force);
+        }
 
 
 
