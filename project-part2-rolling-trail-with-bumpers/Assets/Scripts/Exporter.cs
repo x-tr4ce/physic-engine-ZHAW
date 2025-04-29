@@ -101,9 +101,9 @@ public class TimeSeriesData
     //                       float compressionRightSpring, float forceRightSpring,
     //                       float bumperPositionZ, float bumperVelocityZ)
     // not needed for exercise 2
-        public TimeSeriesData(Rigidbody rb, float currentTime, 
-                          float compressionLeftSpring, float forceLeftSpring, 
-                          float bumperPositionZ, float bumperVelocityZ)
+    public TimeSeriesData(Rigidbody rb, float currentTime,
+                      float compressionLeftSpring, float forceLeftSpring,
+                      float bumperPositionZ, float bumperVelocityZ)
     {
         Time = currentTime;
         PositionX = rb.position.x;
@@ -132,6 +132,7 @@ public class TimeSeriesData
     public static string Header()
     {
         // Note: avoid spaces as they would become part of the colum name if imported using pandas!!
-        return "t,x,y,z,vx,vy,vz,dl_left,F_left,dl_right,F_right,z_bumper,vz_bumper";
+        //return "t,x,y,z,vx,vy,vz,dl_left,F_left,dl_right,F_right,z_bumper,vz_bumper";
+        return "t,x,y,z,vx,vy,vz,dl_left,F_left,z_bumper,vz_bumper";
     }
 }
