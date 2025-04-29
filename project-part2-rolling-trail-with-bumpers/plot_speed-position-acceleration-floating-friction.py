@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 1) CSV einlesen
-df = pd.read_csv('time_series-floating-bumper.csv')
+df = pd.read_csv('time_series-friction.csv')
 
 # 2) Zeit und Bewegungsgrößen extrahieren
 t  = df['t'].values            # Zeit [s]
