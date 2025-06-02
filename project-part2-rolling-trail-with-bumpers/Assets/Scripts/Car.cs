@@ -185,7 +185,7 @@ public class Car : MonoBehaviour
         // if (compressionRight > 0f)
         //     force += Vector3.back * (compressionRight * springConstant);
         // -> not needed for exercise 2
-§
+
         if (transform.position.z + (carWidth / 2) >= rightBumper.position.z - (bumperWidth / 2))
         {
             // Kollision detected
